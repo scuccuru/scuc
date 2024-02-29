@@ -591,6 +591,7 @@ while True:
     except Conflict as e:
         logging.error(f"Conflict error: {e}")
         logging.info("Retrying in 5 seconds...")
+        print("ERROREEEEEEEEEEEEEEEEEE")
         time.sleep(5)  # Wait for 5 seconds before retrying
 
 # Run the bot until you press Ctrl-C
