@@ -3,7 +3,7 @@ import pandas as pd
 from telegram.ext import Updater, CommandHandler, MessageHandler, ConversationHandler, CallbackQueryHandler
 from telegram import InlineKeyboardButton, InlineKeyboardMarkup
 from telegram.ext import Filters
-
+import time
 
 import re
 
@@ -583,6 +583,16 @@ dispatcher.add_handler(CallbackQueryHandler(remove_quantity))
 dispatcher.add_handler(gestore_conversazione)
 
 
-# Avvia il bot
-updater.start_polling()
+while True:
+    try:
+        updater.start_polling()
+        break  # Exit the loop if polling starts successfully
+    except Conflict as e:
+        logging.error(f"Conflict error: {e}")
+        logging.info("Retrying in 5 seconds...")
+        time.sleep(5)  # Wait for 5 seconds before retrying
+
+# Run the bot until you press Ctrl-C
 updater.idle()
+
+
