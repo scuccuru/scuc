@@ -3,6 +3,8 @@ import pandas as pd
 from telegram.ext import Updater, CommandHandler, MessageHandler, ConversationHandler, CallbackQueryHandler, Filters
 from telegram import InlineKeyboardButton, InlineKeyboardMarkup
 import re
+import streamlit as st 
+import asyncio
 
 import requests
 
@@ -519,10 +521,21 @@ def button(update, context):
   else:
       query.answer()  # Rispondi alla callback_query
 
+def get_or_create_eventloop():
+    try:
+        return asyncio.get_event_loop()
+    except RuntimeError as ex:
+        if "There is no current event loop in thread" in str(ex):
+            loop = asyncio.new_event_loop()
+            asyncio.set_event_loop(loop)
+            return asyncio.get_event_loop()
+
+if "loop" not in st.session_state:
+    st.session_state.loop = asyncio.new_event_loop()
+asyncio.set_event_loop(st.session_state.loop)
 
 updater = Updater(TOKEN, use_context = True)
 dispatcher = updater.dispatcher
-
 # Registra il gestore di callback query nel dispatcher
 dispatcher.add_handler(CallbackQueryHandler(button, pattern='^(search|order|clearorder|modifica_ordine|promozione)$'))
 # Registra la nuova funzione come gestore di comando per il comando /start
@@ -569,14 +582,7 @@ dispatcher.add_handler(CallbackQueryHandler(remove_quantity))
 # Aggiungi il gestore della conversazione al dispatcher
 dispatcher.add_handler(gestore_conversazione)
 
-import time
+
+updater.start_polling()
 
 
-if __name__=='__main__':
-    while True:
-        try:
-            bot.polling(non_stop=True, interval=0)
-        except Exception as e:
-            print(e)
-            time.sleep(5)
-            continue
