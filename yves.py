@@ -594,7 +594,8 @@ while True:
         print("ERROREEEEEEEEEEEEEEEEEE")
         time.sleep(5)  # Wait for 5 seconds before retrying
 
-# Run the bot until you press Ctrl-C
-updater.idle()
+
+
+
 
 
