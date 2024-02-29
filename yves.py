@@ -1,11 +1,7 @@
 from bs4 import BeautifulSoup
 import pandas as pd
-from telegram.ext import Updater, CommandHandler, MessageHandler, ConversationHandler, CallbackQueryHandler
+from telegram.ext import Updater, CommandHandler, MessageHandler, ConversationHandler, CallbackQueryHandler, Filters
 from telegram import InlineKeyboardButton, InlineKeyboardMarkup
-from telegram.ext import Filters
-from telegram.error import Conflict
-import time
-
 import re
 
 import requests
@@ -19,6 +15,7 @@ PROMO_ID, NEW_ID, NEW_PRICE, FINE, CHILL= range(5)
 # Inizializza la lista degli ordini e il prezzo totale
 lista_ordine = []
 prezzo_totale = 0
+
 
 # Leggi il file Excel in un DataFrame di pandas
 df = pd.read_excel('yves.xlsx')
@@ -491,8 +488,7 @@ def start(update, context):
         [InlineKeyboardButton("Ordine", callback_data='order')],
         [InlineKeyboardButton("Cancella Ordine", callback_data='clearorder')],
         [InlineKeyboardButton("Mofiica Quantità", callback_data='modifica_ordine')],
-        [InlineKeyboardButton("Promozione", callback_data='promozione')],
-        [InlineKeyboardButton("Termina", callback_data='toggle')]
+        [InlineKeyboardButton("Promozione", callback_data='promozione')]
       ]
       reply_markup = InlineKeyboardMarkup(keyboard)
       context.bot.send_message(update.callback_query.from_user.id, 'Quale altra operazione desideri eseguire?', reply_markup=reply_markup)
@@ -513,8 +509,6 @@ def button(update, context):
     modifica_ordine(update, context)
   elif query.data == 'promozione':
     start_promotion(update, context)
-  elif query.data == 'toggle':
-        toggle_bot(update, context)
   else:
       # Se l'oggetto update non contiene un messaggio, esci dalla funzione
       return
@@ -525,20 +519,12 @@ def button(update, context):
   else:
       query.answer()  # Rispondi alla callback_query
 
-def toggle_bot(update, context):
-    global bot_attivo
-    bot_attivo = not bot_attivo
-    if bot_attivo:
-        update.message.reply_text("Bot attivato!")
-    else:
-        update.message.reply_text("Bot disattivato.")
-
 
 updater = Updater(TOKEN, use_context = True)
 dispatcher = updater.dispatcher
 
 # Registra il gestore di callback query nel dispatcher
-dispatcher.add_handler(CallbackQueryHandler(button, pattern='^(search|order|clearorder|modifica_ordine|promozione|toggle)$'))
+dispatcher.add_handler(CallbackQueryHandler(button, pattern='^(search|order|clearorder|modifica_ordine|promozione)$'))
 # Registra la nuova funzione come gestore di comando per il comando /start
 dispatcher.add_handler(CommandHandler('start', start))
 
@@ -583,19 +569,14 @@ dispatcher.add_handler(CallbackQueryHandler(remove_quantity))
 # Aggiungi il gestore della conversazione al dispatcher
 dispatcher.add_handler(gestore_conversazione)
 
-
-while True:
-    try:
-        updater.start_polling()
-        break  # Exit the loop if polling starts successfully
-    except Conflict as e:
-        logging.error(f"Conflict error: {e}")
-        logging.info("Retrying in 5 seconds...")
-        print("ERROREEEEEEEEEEEEEEEEEE")
-        time.sleep(5)  # Wait for 5 seconds before retrying
+import time
 
 
-
-
-
-
+if __name__=='__main__':
+    while True:
+        try:
+            bot.polling(non_stop=True, interval=0)
+        except Exception as e:
+            print(e)
+            time.sleep(5)
+            continue
