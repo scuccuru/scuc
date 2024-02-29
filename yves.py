@@ -3,6 +3,7 @@ import pandas as pd
 from telegram.ext import Updater, CommandHandler, MessageHandler, ConversationHandler, CallbackQueryHandler
 from telegram import InlineKeyboardButton, InlineKeyboardMarkup
 from telegram.ext import Filters
+from telegram.error import Conflict
 import time
 
 import re
