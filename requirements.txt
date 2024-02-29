@@ -22,7 +22,6 @@ chart_studio==1.1.0
 checks==0.2
 ConfigParser==6.0.1
 contextlib2==21.6.0
-ctypes_snappy==1.03
 curio==1.6
 cycler==0.12.1
 Cython==3.0.8
