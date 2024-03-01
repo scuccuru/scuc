@@ -585,9 +585,9 @@ dispatcher.add_handler(CallbackQueryHandler(remove_quantity))
 dispatcher.add_handler(gestore_conversazione)
 
 try:
-        return updater.start_polling()
+        updater.start_polling()
 except Conflict:
         updater.stop()
-        return updater.start_polling()
+        updater.start_polling()
            
 
