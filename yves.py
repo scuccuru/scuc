@@ -528,6 +528,7 @@ def get_or_create_eventloop():
         if "There is no current event loop in thread" in str(ex):
             loop = asyncio.new_event_loop()
             asyncio.set_event_loop(loop)
+            updater.stop()
             return asyncio.get_event_loop()
 
 if "loop" not in st.session_state:
