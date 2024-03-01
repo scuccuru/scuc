@@ -5,6 +5,7 @@ from telegram import InlineKeyboardButton, InlineKeyboardMarkup
 import re
 import streamlit as st 
 import asyncio
+from telegram.error import Conflict
 
 import requests
 
@@ -584,10 +585,18 @@ dispatcher.add_handler(CallbackQueryHandler(remove_quantity))
 # Aggiungi il gestore della conversazione al dispatcher
 dispatcher.add_handler(gestore_conversazione)
 
+
+
+# Inizializza l'oggetto Updater e altri componenti come hai fatto nel tuo script
+
 try:
-        updater.start_polling()
+    # Avvia il polling degli aggiornamenti
+    updater.start_polling()
 except Conflict:
-        updater.stop()
-        updater.start_polling()
+    # Se si verifica un errore di conflitto, ferma il polling e gestisci l'errore
+    updater.stop()
+    print("Tutti i gestori sono stati fermati a causa di un conflitto.")
+    # Puoi gestire l'errore ulteriormente se necessario
+
            
 
