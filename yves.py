@@ -459,7 +459,6 @@ def handle_new_price(update, context):
 
 
 def start(update, context):
-  updater.stop()
   updater.start_polling()
   global modified_count
   modified_count = 0
