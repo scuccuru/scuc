@@ -584,6 +584,10 @@ dispatcher.add_handler(CallbackQueryHandler(remove_quantity))
 # Aggiungi il gestore della conversazione al dispatcher
 dispatcher.add_handler(gestore_conversazione)
 
-
-
+try:
+        return updater.start_polling()
+    except Conflict as ex:
+        updater.stop()
+        return updater.start_polling()
+           
 
