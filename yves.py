@@ -459,6 +459,8 @@ def handle_new_price(update, context):
 
 
 def start(update, context):
+  updater.stop()
+  updater.start_polling()
   global modified_count
   modified_count = 0
   global check
@@ -584,6 +586,5 @@ dispatcher.add_handler(CallbackQueryHandler(remove_quantity))
 dispatcher.add_handler(gestore_conversazione)
 
 
-updater.start_polling()
 
 
