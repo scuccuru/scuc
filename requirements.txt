@@ -5,5 +5,4 @@ requests-toolbelt==0.10.1
 python-telegram-bot==13.0
 requests
 openpyxl
-streamlit
-asyncio
+gunicorn
