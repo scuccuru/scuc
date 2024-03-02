@@ -3,7 +3,7 @@ import pandas as pd
 from telegram.ext import Updater, CommandHandler, MessageHandler, ConversationHandler, CallbackQueryHandler, Filters
 from telegram import InlineKeyboardButton, InlineKeyboardMarkup
 import re
-import streamlit as st 
+
 import asyncio
 from telegram.error import Conflict
 
@@ -473,7 +473,7 @@ def start(update, context):
   if update.message:
       # Call the load_order_from_file function to populate lista_ordine
       lista_ordine = []
-      load_order_from_file()
+      
       keyboard = [
           [InlineKeyboardButton("Cerca", callback_data='search')],
           [InlineKeyboardButton("Ordine", callback_data='order')],
@@ -486,7 +486,7 @@ def start(update, context):
       update.message.reply_text('Benvenuto! Cosa desideri fare?', reply_markup=reply_markup)
       return ConversationHandler.END
   else: 
-      save_order_to_file()
+      
       keyboard = [
         [InlineKeyboardButton("Cerca", callback_data='search')],
         [InlineKeyboardButton("Ordine", callback_data='order')],
@@ -523,19 +523,7 @@ def button(update, context):
   else:
       query.answer()  # Rispondi alla callback_query
 
-def get_or_create_eventloop():
-    try:
-        return asyncio.get_event_loop()
-    except RuntimeError as ex:
-        if "There is no current event loop in thread" in str(ex):
-            loop = asyncio.new_event_loop()
-            asyncio.set_event_loop(loop)
-            updater.stop()
-            return asyncio.get_event_loop()
 
-if "loop" not in st.session_state:
-    st.session_state.loop = asyncio.new_event_loop()
-asyncio.set_event_loop(st.session_state.loop)
 
 updater = Updater(TOKEN, use_context = True)
 dispatcher = updater.dispatcher
@@ -589,14 +577,6 @@ dispatcher.add_handler(gestore_conversazione)
 
 # Inizializza l'oggetto Updater e altri componenti come hai fatto nel tuo script
 
-try:
-    # Avvia il polling degli aggiornamenti
-    updater.start_polling()
-except Conflict:
-    # Se si verifica un errore di conflitto, ferma il polling e gestisci l'errore
-    updater.stop()
-    st.write("Tutti i gestori sono stati fermati a causa di un conflitto.")
-    # Puoi gestire l'errore ulteriormente se necessario
-
+updater.start_polling()
            
 
