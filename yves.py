@@ -595,7 +595,7 @@ try:
 except Conflict:
     # Se si verifica un errore di conflitto, ferma il polling e gestisci l'errore
     updater.stop()
-    print("Tutti i gestori sono stati fermati a causa di un conflitto.")
+    st.write("Tutti i gestori sono stati fermati a causa di un conflitto.")
     # Puoi gestire l'errore ulteriormente se necessario
 
            
